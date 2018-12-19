@@ -1,0 +1,2 @@
+#必须是加载类的父类或者接口
+com.fansin.serviceloader.TaskService

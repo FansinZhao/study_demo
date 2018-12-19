@@ -1,0 +1,3 @@
+com.fansin.serviceloader.MessageService
+com.fansin.serviceloader.TaskService
+com.fansin.serviceloadercopy.TransAuthService
