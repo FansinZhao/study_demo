@@ -115,6 +115,49 @@ public class ThreadPoolDemo {
 
     }
 
+    static class LeakedThreadPool1 {
+
+        public static void main(String[] args) {
+
+            ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(2, 2, 0, TimeUnit.MILLISECONDS,
+                                                                     new ArrayBlockingQueue<>(10),
+                                                                     new NamedThreadFactory("逃逸线程",
+                                                                                            new ThreadGroup("内存泄漏线程组"),
+                                                                                            false));
+
+            for (int i = 0; i < 1000; i++) {
+
+                poolExecutor.execute(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        System.out.println(Thread.currentThread().getName() + " " + LocalDateTime.now().toString());
+                        try {
+                            Thread.sleep(1000L);
+                        } catch (InterruptedException e) {
+                            //log
+                            e.printStackTrace();
+
+                        }
+                    }
+                });
+            }
+
+            poolExecutor.shutdown();
+
+            try {
+                poolExecutor.awaitTermination(30, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                //log
+                e.printStackTrace();
+            }
+
+            System.out.println(" 线程池结束了? ");
+
+        }
+
+    }
+
 }
 
 
